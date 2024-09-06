@@ -137,3 +137,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83b611555f10d96489465fe39c6080b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myPhotoView: {fileID: 0}

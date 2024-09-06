@@ -12,15 +12,15 @@ public class PlayerController : MonoBehaviour
         SendChatMessage("Mensagem teste");
     }
 
-    [PunRPC]
-    public void ChatMessage(string receivedText, PhotonMessageInfo info)
-    {
-        Debug.Log("Mensagem recebida: " + receivedText);
-    }
-
     public void SendChatMessage(string textToSend)
     {
         myPhotoView.RPC("ChatMessage", RpcTarget.All, textToSend);
         Debug.Log("Mensagem recebida: " + textToSend);
+    }
+
+    [PunRPC]
+    public void ReceiveChat(string receivedText, PhotonMessageInfo info)
+    {
+        Debug.Log("Mensagem recebida: " + receivedText);
     }
 }
