@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     }
 
     [PunRPC]
-
     public void ChatMessage(string receivedText, PhotonMessageInfo info)
     {
         Debug.Log("Mensagem recebida: " + receivedText);
