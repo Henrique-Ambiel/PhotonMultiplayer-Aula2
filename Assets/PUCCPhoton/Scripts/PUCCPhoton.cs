@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,10 @@ using UnityEngine.UI;
 public class PUCCPhoton : MonoBehaviourPunCallbacks
 {
     public Text userList;
+    public Text input;
+    public Text _messages;
+    public Text userNameInput;
+    public string userName;
     void Start()
     {
         userList.text = "";
@@ -90,5 +95,22 @@ public class PUCCPhoton : MonoBehaviourPunCallbacks
         {
             userList.text+= player.NickName + "\n";
         }
+    }
+
+    [PunRPC(RpcSources.All, RpcTarget.All)]
+    public void SetUserName()
+    {
+        userName = userList.text;
+    }
+
+    public void CallMessageRPC()
+    {
+        string message = input.text;
+        RPC_SendMessage(message, userName);
+    }
+
+    public void RPC_SendMessage(string message, string userName, RpcInfo rpcInfor = default)
+    {
+        _messages.text += $"{userName}: {message}\n";
     }
 }
