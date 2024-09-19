@@ -11,10 +11,10 @@ using UnityEngine.UI;
 public class PUCCPhoton : MonoBehaviourPunCallbacks
 {
     public Text userList;
-    public Text input;
-    public Text _messages;
-    public Text userNameInput;
-    public string userName;
+    public TMP_InputField input;
+    public TextMeshProUGUI _messages;
+    public TMP_InputField userNameInput;
+    public GameObject myPlayer;
     void Start()
     {
         userList.text = "";
@@ -68,7 +68,7 @@ public class PUCCPhoton : MonoBehaviourPunCallbacks
         //esse evento acontece quando EU entro na sala
         Debug.Log("[PUCCPhoton] Entrei na sala!");
         UpdateUserList();
-        PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        myPlayer = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -86,30 +86,26 @@ public class PUCCPhoton : MonoBehaviourPunCallbacks
         userList.text = userList.text.Replace(otherPlayer.NickName + "\n", "");
         UpdateUserList();
     }
-    
+
     //Atualiza a lista de players
     public void UpdateUserList()
     {
         userList.text = "";
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            userList.text+= player.NickName + "\n";
+            userList.text += player.NickName + "\n";
         }
     }
 
-    [PunRPC(RpcSources.All, RpcTarget.All)]
-    public void SetUserName()
-    {
-        userName = userList.text;
-    }
-
+    //Chama o texto que o player irá enviar ao clicar no botão
     public void CallMessageRPC()
     {
-        string message = input.text;
-        RPC_SendMessage(message, userName);
+        myPlayer.GetComponent<PlayerController>().SendChatMessage(input.text, PhotonNetwork.NickName);
+        input.text = "";
     }
 
-    public void RPC_SendMessage(string message, string userName, RpcInfo rpcInfor = default)
+    //Exibe a mensagem do player na tela do jogo
+    public void UpdateMessage(string message, string userName)
     {
         _messages.text += $"{userName}: {message}\n";
     }
